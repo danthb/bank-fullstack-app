@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense, lazy }  from 'react';
+import {BrowserRouter as Switch} from 'react-router-dom';
+import {HashRouter as Router, Route} from 'react-router-dom';
+import { UserContext } from './contexts/context';
 
-function App() {
+import './index.css';
+
+const NavBar        = lazy(() => import('./components/navbar')); 
+const Home          = lazy(() => import('./components/home'));
+const CreateAccount = lazy(() => import('./components/createaccount'));
+const Login         = lazy(() => import('./components/login'));
+const Deposit       = lazy(() => import('./components/deposit'));
+const Withdraw      = lazy(() => import('./components/withdraw'));
+/* const Balance       = lazy(() => import('./components/Balance/balance')); */
+const AllData       = lazy(() => import('./components/alldata'));
+const PrivateRoute = lazy(() => import('./components/privateroute'))
+const PublicRoute  = lazy(() => import('./components/publicroute'))
+/* const NotFound      = lazy(() => import('./components/NotFound/notfound')); */
+
+
+export default function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    
+      <Router>
+       <Switch>
+          <Suspense fallback = {<div>loading...</div>}>
+            <NavBar />
+            <div>
+              <UserContext.Provider >
+                <div className="container" style={{ padding: "20px" }}>
+                  <Route path='/' exact component={Home} /> 
+                  <PublicRoute path='/createaccount' component={CreateAccount} />
+                  <PublicRoute path='/login' component={Login}/>
+            
+                  <PrivateRoute exact path='/deposit' component={Deposit} />
+                  <PrivateRoute exact path='/withdraw' component={Withdraw} />
+                  {/* <PrivateRoute exat path='/balance' component={Balance} /> */}
+                  <PrivateRoute path='/alldata' component={AllData} />
+                  {/* <Route path='*' component={NotFound} /> */}
+                </div>
+              </UserContext.Provider>
+            </div>
+          </Suspense>
+        </Switch>
+      </Router>
+  
+    )
 }
-
-export default App;
