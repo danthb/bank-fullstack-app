@@ -4,7 +4,7 @@ import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 
 // Initialize Firebase
 initializeApp({
-    apiKey: "AIzaSyDBTb7qL7tYVfsrmVVzcTM3TsEc_NljkXg",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
     projectId: process.env.FIREBASE_PROJECT_ID,
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
