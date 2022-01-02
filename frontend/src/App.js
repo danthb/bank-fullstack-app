@@ -2,6 +2,7 @@ import React, { Suspense, lazy }  from 'react';
 import {BrowserRouter as Switch} from 'react-router-dom';
 import {HashRouter as Router, Route} from 'react-router-dom';
 import { UserContext } from './contexts/context';
+import { AuthContextFB, AuthProviderFB } from './contexts/AuthContextFB';
 
 import './index.css';
 
@@ -21,12 +22,12 @@ const PublicRoute  = lazy(() => import('./components/publicroute'))
 export default function App() {
 
   return (
-    
       <Router>
        <Switch>
           <Suspense fallback = {<div>loading...</div>}>
             <NavBar />
-            <div>
+          <div>
+            <AuthProviderFB>
               <UserContext.Provider >
                 <div className="container" style={{ padding: "20px" }}>
                   <Route path='/' exact component={Home} /> 
@@ -40,6 +41,7 @@ export default function App() {
                   {/* <Route path='*' component={NotFound} /> */}
                 </div>
               </UserContext.Provider>
+            </AuthProviderFB>
             </div>
           </Suspense>
         </Switch>

@@ -1,14 +1,18 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import BankForm from './bankform';
 import useAuth from "../contexts/Auth/useAuth"
+import { AuthContextFB } from '../contexts/AuthContextFB';
 
 export default function Login() {
     
 
-    const auth = useAuth();
-    const [currenUser, setCurrentUser] = useState('')
-    const [userNotFound, setUserNotFound] = useState(false)
-    const { login, users } = useAuth();
+  const auth = useAuth();
+    
+  const [currenUser, setCurrentUser] = useState('')
+  const [userNotFound, setUserNotFound] = useState(false)
+  const { login, users } = useAuth();
+  
+  const {loginFB} = useContext(AuthContextFB)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     function findlogedUser(){
         let userLoged = auth.users.filter(user => user.isLogedU === true)
@@ -24,7 +28,7 @@ export default function Login() {
         findlogedUser()
       }, [findlogedUser, users])
   
-    function handle(data) {
+    /* function handle(data) {
     
         let user = auth.users.filter(user => user.email === data.email)
         if ( user.length > 0){
@@ -40,6 +44,10 @@ export default function Login() {
         }, 2000)
         }
         console.log(currenUser)
+    } */
+    const handle = (data) => {
+      loginFB(data.email, data.password)
+      
     }
     return (
       
