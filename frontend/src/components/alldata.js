@@ -1,10 +1,21 @@
-import React, { useContext, Fragment } from "react";
+import React, { useContext, Fragment, useEffect } from "react";
 import { AuthContext } from "../contexts/Auth/AuthProvider";
-
-
+import { accountAPI } from "../services";
 
 export default function AllData() {
     const auth = useContext(AuthContext);  
+
+    useEffect(() => {
+        const getAccounts = async () => {
+            try {
+                const response = await accountAPI.all();
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }   
+        }
+        getAccounts();
+    }, [] );
     return (
         <Fragment>
             <div class="card text-center">
