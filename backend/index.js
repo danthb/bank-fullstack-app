@@ -4,7 +4,7 @@ var cors    = require('cors');
 var dal     = require('./dal.js');
 const e = require('express');
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: process.env.CLIENT_URL,
 }
 // used to serve static files from public directory
 app.use(express.static('public'));
