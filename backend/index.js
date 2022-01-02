@@ -1,17 +1,30 @@
-var express = require('express');
-var app     = express();
-var cors    = require('cors');
-var dal     = require('./dal.js');
+const express = require('express');
+const app     = express();
+const cors    = require('cors');
+const dal = require('./dal.js');
 const e = require('express');
 const corsOptions = {
     origin: process.env.CLIENT_URL,
 }
+const mongoose = require('mongoose');
+const firebase = require('./config/firebase.js');
+
+// connect to mongo
+mongoose
+    .connect(process.env.DB_URL,
+        { useNewUrlParser: true, useUnifiedTopology: true })
+    .then((x) => console.log(`Connected to MongoDB, database: ${x.connections[0].name}`))
+    .catch(err => console.error('Could not connect to MongoDB', err));
+
 // used to serve static files from public directory
 app.use(express.static('public'));
 app.use(cors(corsOptions));
 
+//Routes
 // create user account
-app.get('/account/create/:name/:email/:password', function (req, res) {
+
+
+/* app.get('/account/create/:name/:email/:password', function (req, res) {
 
     // check if account exists
     dal.find(req.params.email).
@@ -99,7 +112,7 @@ app.get('/account/all', function (req, res) {
             res.send(docs);
     });
 });
-
-var port = 3001;
+ */
+var port = process.env.PORT || 3001;
 app.listen(port);
 console.log('Running on port: ' + port);
