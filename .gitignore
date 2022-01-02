@@ -122,5 +122,8 @@ dist
 # Support for Project snippet scope
 !.vscode/*.code-snippets
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
+# mac file
 .DS_Store
+
+# Firebase account files
+backend/config/serviceAccountKey.json
