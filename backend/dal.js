@@ -1,5 +1,6 @@
+require('dotenv').config()
 const MongoClient = require('mongodb').MongoClient;
-const url         = 'mongodb://localhost:27017';
+const url         = process.env.DB_URL;
 let db            = null;
  
 // connect to mongo
@@ -47,7 +48,7 @@ function findOne(email){
 // update - deposit/withdraw amount
 function update(email, amount){
     return new Promise((resolve, reject) => {    
-        const customers = db
+        const users = db
             .collection('users')            
             .findOneAndUpdate(
                 {email: email},
