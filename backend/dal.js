@@ -67,7 +67,7 @@ function update(email, amount){
 function all(){
     return new Promise((resolve, reject) => {    
         const customers = db
-            .collection('customers')
+            .collection('users')
             .find({})
             .toArray(function(err, docs) {
                 err ? reject(err) : resolve(docs);

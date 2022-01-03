@@ -1,8 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const app     = express();
 const cors    = require('cors');
 const dal = require('./dal.js');
 const e = require('express');
+const User = require('./models/User')
+const bodyParser = require('body-parser');
 const corsOptions = {
     origin: process.env.CLIENT_URL,
 }
@@ -18,10 +21,38 @@ mongoose
 
 // used to serve static files from public directory
 app.use(express.static('public'));
+app.use(bodyParser.json())
 app.use(cors(corsOptions));
 
 //Routes
+app.get('/account/all', function (req, res) {
+
+    dal.all().
+        then((docs) => {
+            console.log(docs);
+            res.send(docs);
+    });
+});
+
 // create user account
+app.post('/account/create', async(req, res) => {
+    const { email, password } = req.body;
+    console.log(req.body);
+    try {
+        const firebaseUser = await firebase.auth().createUser({
+            email,
+            emailVerified: true,
+            password,
+            disabled: false
+        })
+        console.log('firebaseUser', firebaseUser)
+        const dbUser = await User.create({email, firebaseId: firebaseUser.uid})
+        console.log('dbUser', dbUser)
+    } catch (error) {
+        console.log(error)
+    }
+    res.status(200).send('ok')
+})
 
 
 /* app.get('/account/create/:name/:email/:password', function (req, res) {
