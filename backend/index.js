@@ -36,7 +36,7 @@ app.get('/account/all', function (req, res) {
 
 // create user account
 app.post('/account/create', async(req, res) => {
-    const { username, email, password, balance } = req.body;
+    const { username, email, password} = req.body;
     console.log(req.body);
     try {
         const firebaseUser = await firebase.auth().createUser({
