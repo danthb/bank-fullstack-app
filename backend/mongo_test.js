@@ -11,12 +11,14 @@ MongoClient.connect(url, {useUnifiedTopology: true}, function(err, client) {
     const db = client.db(dbName);
 
     // new user
-    var name = 'user' + Math.floor(Math.random()*10000);
-    var email = name + '@mit.edu';
+    const username = 'user' + Math.floor(Math.random()*10000);
+    const email = username + '@mit.edu';
+    const firebaseId = (Math.floor(Math.random()*100000000)).toString();
+    const balance = 0;
 
     // insert into customer table
     var collection = db.collection('users');
-    var doc = {name, email};
+    var doc = {username, email, firebaseId, balance};
     collection.insertOne(doc, {w:1}, function(err, result) {
         console.log('Document insert');
     });

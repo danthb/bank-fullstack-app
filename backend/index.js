@@ -36,7 +36,7 @@ app.get('/account/all', function (req, res) {
 
 // create user account
 app.post('/account/create', async(req, res) => {
-    const { email, password } = req.body;
+    const { username, email, password, balance } = req.body;
     console.log(req.body);
     try {
         const firebaseUser = await firebase.auth().createUser({
@@ -46,7 +46,7 @@ app.post('/account/create', async(req, res) => {
             disabled: false
         })
         console.log('firebaseUser', firebaseUser)
-        const dbUser = await User.create({email, firebaseId: firebaseUser.uid})
+        const dbUser = await User.create({username, email, firebaseId: firebaseUser.uid, balance: 0})
         console.log('dbUser', dbUser)
     } catch (error) {
         console.log(error)
