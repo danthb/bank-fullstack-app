@@ -1,36 +1,26 @@
-import React, {useState, useEffect, Fragment } from "react";
+import React, {useState, useEffect, useContext, Fragment } from "react";
 import { NavLink, useHistory } from 'react-router-dom';
-import useAuth from '../contexts/Auth/useAuth';
+import {AuthContextFB}  from '../contexts/AuthContextFB';
 import './navbar.css'
 
-
 export default function Nav() {
-
-    const auth = useAuth();
+    const { authFB, logoutFB } = useContext(AuthContextFB);
     const history = useHistory();
-    const { logout/* , users  */} = useAuth();
     const [currentUser, setCurrentUser] = useState(null)
-
-
-    useEffect(()=>{
-        let user = auth.users.filter(user => user.isLogedU === true)
-   
-        if (user.length > 0) {
-          
-          setCurrentUser(user[0])
-        }
-      },[auth.users])
-      const Sign = () => {
-        let user = auth.users.filter(user => user.isLogedU === true)
-        if (user[0]) {
-          logout(user[0])
-          setCurrentUser(null)
-          history.push('/')
-          
+    
+    const handle = () => {
+        if (authFB) {
+            logoutFB().then(() => {
+                setCurrentUser(null)
+                console.log('logout')
+            })
         } else {
-          history.push('/')
+            console.log('no user')
         }
-      }
+    }
+    useEffect(()=>{
+        setCurrentUser(authFB)
+  }, [authFB])
 
     return (
        
@@ -47,7 +37,7 @@ export default function Nav() {
                         <li className="nav-item" data-toggle="tooltip" data-placement="bottom" title="Landing page" >
                             <NavLink className="nav-link p-2 flex-column-1 aligment" aria-current="page" exact to="/" >Home</NavLink>
                         </li>
-                    {currentUser ?  
+                    {1 ?  
                         <Fragment>
                                 {/* <li className="nav-item">
                                     <NavLink className="nav-link"  title='balance' to="/balance">Balance</NavLink>
@@ -67,7 +57,7 @@ export default function Nav() {
                     </ul>
                     <ul className="d-flex flex-row-reverse bd-highlight "  >
                         <li type="button"   className="btn btn-outline-primary nav-item" data-toggle="tooltip" data-placement="bottom" title={!currentUser ? "Enter to your account": 'Click to left'}>
-                            <NavLink className="nav-link" to="/login" onClick={Sign}>{currentUser ? 'Logout' : 'Login'}</NavLink>   
+                            <NavLink className="nav-link" to="/login" onClick={handle}>{currentUser ? 'Logout' : 'Login'}</NavLink>   
                         </li>
                         {!currentUser ?
                         <Fragment> 

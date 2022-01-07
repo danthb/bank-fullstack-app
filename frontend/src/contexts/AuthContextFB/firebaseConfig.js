@@ -17,5 +17,6 @@ const auth = getAuth();
 const firebase = {
     login: (email, password) => signInWithEmailAndPassword(auth, email, password),
     logout: () => signOut(auth),
+    getAuth: () => auth
 }
 export default firebase;

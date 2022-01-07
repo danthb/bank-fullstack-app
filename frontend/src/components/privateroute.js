@@ -1,17 +1,19 @@
-import React from 'react';
-import useAuth from '../contexts/Auth/useAuth';
-
-
+import React, { useContext, useState, useEffect  } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { AuthContextFB } from '../contexts/AuthContextFB';
 export default function PrivateRoute({component: Component, ...rest}) {
    
-    /*     const user = { id: 1, username: 'daniel593' }; */
-    const auth = useAuth();
-    
+    const { authFB } = useContext(AuthContextFB)
+    const [currentUser, setCurrentUser] = useState(null)
+
+    useEffect(() => {
+        setCurrentUser(authFB)
+        console.log('userChanged', authFB)
+      }, [authFB])
     return (
-        /* <Route exact={props.exact} path={props.path} component={props.component} /> */
+
         <Route {...rest}>
-            {auth.isLogedIn() ? <Component/>
+            {currentUser ? <Component/>
                 : (<Redirect to='/login'/>
                 
                 )}

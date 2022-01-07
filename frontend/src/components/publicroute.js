@@ -1,16 +1,13 @@
-
-import React/* , { Suspense, lazy } */ from 'react';
-import useAuth from '../contexts/Auth/useAuth';
-
+import React, {useContext, useEffect, useState} from 'react';
+import { AuthContextFB } from '../contexts/AuthContextFB';
 import { Route, Redirect } from 'react-router-dom';
 export default function PublicRoute({component: Component, ...rest}) {
-   
-  
-    const auth = useAuth();
+    const { authFB } = useContext(AuthContextFB)
+
     return (
-        /* <Route exact={props.exact} path={props.path} component={props.component} /> */
+     
         <Route {...rest}>
-            {!auth.isLogedIn() ? <Component />
+            {!authFB ? <Component />
                 : (<Redirect to='/'></Redirect>
                 
                 )}

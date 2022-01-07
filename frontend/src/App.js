@@ -2,7 +2,7 @@ import React, { Suspense, lazy }  from 'react';
 import {BrowserRouter as Switch} from 'react-router-dom';
 import {HashRouter as Router, Route} from 'react-router-dom';
 import { UserContext } from './contexts/context';
-import { AuthContextFB, AuthProviderFB } from './contexts/AuthContextFB';
+import { AuthProviderFB } from './contexts/AuthContextFB';
 
 import './index.css';
 
@@ -20,7 +20,7 @@ const PublicRoute  = lazy(() => import('./components/publicroute'))
 
 
 export default function App() {
-
+  
   return (
       <Router>
        <Switch>
@@ -31,13 +31,13 @@ export default function App() {
               <UserContext.Provider >
                 <div className="container" style={{ padding: "20px" }}>
                   <Route path='/' exact component={Home} /> 
-                  <PublicRoute path='/createaccount' component={CreateAccount} />
-                  <PublicRoute path='/login' component={Login}/>
+                  <Route path='/createaccount' component={CreateAccount} />
+                  <Route path='/login' component={Login}/>
             
-                  <PrivateRoute exact path='/deposit' component={Deposit} />
-                  <PrivateRoute exact path='/withdraw' component={Withdraw} />
+                  <Route exact path='/deposit' component={Deposit} />
+                  <Route exact path='/withdraw' component={Withdraw} />
                   {/* <PrivateRoute exat path='/balance' component={Balance} /> */}
-                  <PrivateRoute path='/alldata' component={AllData} />
+                  <Route path='/alldata' component={AllData} />
                   {/* <Route path='*' component={NotFound} /> */}
                 </div>
               </UserContext.Provider>

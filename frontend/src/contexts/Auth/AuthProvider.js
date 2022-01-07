@@ -1,10 +1,27 @@
-import React, {createContext} from "react";
+import React, { createContext } from "react";
+
 
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
 
-    const [users, setUsers] = React.useState([{ name: 'User', email: 'user@email.com', password: '12345678', balance: 100, isLogedU: false }])
+    const [users, setUsers] = React.useState(
+        [
+            {
+                username:'user',
+                email: 'user@email.com',
+                password: '12345678',
+                balance: 0,
+                isLogedU: false
+            },
+            {
+                "username": "danthb",
+                "email": "danthb@gmail.com",
+                "password": "12345678",
+                "balance": 0,
+                "isLogedU": false
+            }
+        ])
     const[isLoged, setIsLoged] = React.useState(false)
 
     
