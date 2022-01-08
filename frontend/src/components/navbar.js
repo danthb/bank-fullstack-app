@@ -29,14 +29,11 @@ export default function Nav() {
 
             <div className="container-fluid d-flex flex-row bd-highlight mb"  >
                 <NavLink className="nav-link active" aria-current="page" to="/">BadBank</NavLink>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="navbar-collapse " id="navbarSupportedContent">
+                <div className="navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0  aligment" style={{ alignItems:'end'}}>
-                        <li className="nav-item" data-toggle="tooltip" data-placement="bottom" title="Landing page" >
-                            <NavLink className="nav-link p-2 flex-column-1 aligment" aria-current="page" exact to="/" >Home</NavLink>
-                        </li>
                     {1 ?  
                         <Fragment>
                                 {/* <li className="nav-item">
