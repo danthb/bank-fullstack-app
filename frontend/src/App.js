@@ -12,10 +12,10 @@ const CreateAccount = lazy(() => import('./components/createaccount'));
 const Login         = lazy(() => import('./components/login'));
 const Deposit       = lazy(() => import('./components/deposit'));
 const Withdraw      = lazy(() => import('./components/withdraw'));
-/* const Balance       = lazy(() => import('./components/Balance/balance')); */
+const Balance       = lazy(() => import('./components/balance'));
 const AllData       = lazy(() => import('./components/alldata'));
-const PrivateRoute = lazy(() => import('./components/privateroute'))
-const PublicRoute  = lazy(() => import('./components/publicroute'))
+/* const PrivateRoute = lazy(() => import('./components/privateroute'))
+const PublicRoute  = lazy(() => import('./components/publicroute')) */
 /* const NotFound      = lazy(() => import('./components/NotFound/notfound')); */
 
 
@@ -25,10 +25,9 @@ export default function App() {
       <Router>
        <Switch>
        <AuthProviderFB>
-          <Suspense fallback = {<div>loading...</div>}>
-            <NavBar />
+        <Suspense fallback = {<div>loading...</div>}>
+          <NavBar />
           <div>
-            
               <UserContext.Provider >
                 <div className="container" style={{ padding: "20px" }}>
                   <Route path='/' exact component={Home} /> 
@@ -37,7 +36,7 @@ export default function App() {
             
                   <Route exact path='/deposit' component={Deposit} />
                   <Route exact path='/withdraw' component={Withdraw} />
-                  {/* <PrivateRoute exat path='/balance' component={Balance} /> */}
+                  <Route exat path='/balance' component={Balance} />
                   <Route path='/alldata' component={AllData} />
                   {/* <Route path='*' component={NotFound} /> */}
                 </div>

@@ -1,30 +1,42 @@
-import React, { Fragment } from "react";
-import { AuthContext } from "./Auth/AuthProvider";
-import {Card} from "../context"
+import React, { Fragment, useContext, useState } from "react";
+import { AuthContextFB } from "../contexts/AuthContextFB";
+import {Card} from "../contexts/context";
+import { accountAPI } from "../services";
 
 export default function Balance() {
-    const auth = React.useContext(AuthContext);
-    let user = auth.users.filter(user => user.isLogedU === true)
-    let index;
-    let balance;
-    if (user.length > 0) {
-      index = auth.users.indexOf(user[0])
-      balance = auth.users[index].balance
+  const[balance, setBalance] = useState(0);
+  const { authFB } = useContext(AuthContextFB);
+  if (authFB) {
+    const getAccounts = async () => {
+        try {
+            const response = await accountAPI.all();
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return
+        }   
     }
-    return (
-      <Fragment>
-          <Card
-            bgcolor={'lightblue'}
-            label="Balance"
-            txtcolor='black'
-            header={'Your Balance is:'}
-            body={
-              <h3>
-                ${balance}
-              </h3>
-            }
-          />
-        
-      </Fragment>
-    )
+    getAccounts().then(data => {
+      let user = data.filter(user => user.firebaseId === authFB.uid)
+      console.log('user', user)
+      setBalance(user[0].balance)
+    })
+  }
+
+  return (
+    <Fragment>
+        <Card
+          bgcolor={'lightblue'}
+          label="Balance"
+          txtcolor='black'
+          header={'Your Balance is:'}
+          body={
+            <h3>
+              {balance}
+            </h3>
+          }
+        />
+      
+    </Fragment>
+  )
 }
