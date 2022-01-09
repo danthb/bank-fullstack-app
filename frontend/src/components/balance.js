@@ -6,22 +6,28 @@ import { accountAPI } from "../services";
 export default function Balance() {
   const[balance, setBalance] = useState(0);
   const { authFB } = useContext(AuthContextFB);
-  if (authFB) {
-    const getAccounts = async () => {
-        try {
-            const response = await accountAPI.all();
-            return response.data;
+  
+  const getAccounts = async () => {
+      try {
+        if (authFB) {
+          const response = await accountAPI.all();
+          return response.data;
+        }
         } catch (error) {
             console.log(error);
             return
         }   
     }
+
+  const handle = () => {
     getAccounts().then(data => {
       let user = data.filter(user => user.firebaseId === authFB.uid)
       console.log('user', user)
       setBalance(user[0].balance)
     })
   }
+
+  handle();
 
   return (
     <Fragment>
@@ -35,8 +41,10 @@ export default function Balance() {
               {balance}
             </h3>
           }
-        />
-      
+      />
+      <div style={{ textAlign: 'center' }}>
+      <input type="button"  value="Balance" onClick={handle} />
+      </div>
     </Fragment>
   )
 }
