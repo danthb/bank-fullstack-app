@@ -1,34 +1,48 @@
-import React, { useContext, /* useState, */ Fragment} from "react";
-import { AuthContext } from "../contexts/Auth/AuthProvider";
+import React, { useState, useContext, Fragment} from "react";
 import BankForm from "./bankform";
+import { AuthContextFB } from "../contexts/AuthContextFB";
+import { accountAPI } from "../services";
 
 export default function Deposit(){
-  const auth = useContext(AuthContext);
+  const { authFB } = useContext(AuthContextFB);
+  const[balance, setBalance] = useState(0);
   /* const [success, setSuccess] = useState(true) */
-  
-  let user = auth.users.filter(user => user.isLogedU === true)
-  let index;
-  let balance;
-  if (user.length > 0) {
-    index = auth.users.indexOf(user[0])
-    balance = auth.users[index].balance
+  const getAccounts = async () => {
+    try {
+      if (authFB) {
+        const response = await accountAPI.all();
+        return response.data;
+      }
+      } catch (error) {
+          console.log(error);
+          return
+      }   
   }
-  const handle = (data) => {
-    let user = auth.users.filter(user => user.isLogedU === true)
-    let index = auth.users.indexOf(user[0])
-    
 
-    if (Number(data.amount) >= 0) {
-      auth.users[index].balance += Number(data.amount)
-      alert(`Transaction done, your balance is $${auth.users[index].balance}`)
-      /* setSuccess(true) */
-    } else {
-      alert("You can't make operations with negative amounts")
-      /* setSuccess(false) */
-      return false
-    }
-    return true
-    }
+const handle = (data) => {
+  let user;
+  getAccounts()
+    .then((dataUsers) => {
+      user = dataUsers.filter(user => user.firebaseId === authFB.uid)
+      setBalance(user[0].balance)
+      console.log('balance', balance)
+    })
+    .then( () => {
+      if (Number(data.amount) > 0) {
+        console.log('deposit', data.amount)
+        let newbalance = Number(balance) + Number(data.amount)
+        setBalance(newbalance)
+        console.log('newbalance', balance)
+        alert(`Transaction done, your balance is ${Number(data.amount) + Number(balance)}`)
+        
+      } else {
+        alert("You can't make operations with negative amounts")
+        return false
+      }
+      return true
+  })
+  }
+  handle();
 
     return (
       <BankForm
@@ -40,7 +54,7 @@ export default function Deposit(){
         body={
           <Fragment>
           <h3> Your balance is:</h3>
-          <div>${balance}</div>
+          <div>{balance}</div>
           </Fragment>
         }
     />
