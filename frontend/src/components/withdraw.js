@@ -1,28 +1,52 @@
-import React, { Fragment, useContext } from "react";
-import { AuthContext } from "../contexts/Auth/AuthProvider";
+import React, { useState, useContext, Fragment} from "react";
 import BankForm from "./bankform";
+import { AuthContextFB } from "../contexts/AuthContextFB";
+import { accountAPI } from "../services";
 
 export default function Withdraw() {
+  const { authFB } = useContext(AuthContextFB);
+  const [balance, setBalance] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
-  const auth = useContext(AuthContext);  
-  const handle = (data) => {
-      
-      let user = auth.users.filter(user => user.isLogedU === true)
-      let index = auth.users.indexOf(user[0])
-      let balance = auth.users[index].balance
-      console.log(balance);
-      console.log(data.amount);
-
-
-      if (balance > 0 && balance >= Number(data.amount) && Number(data.amount) >= 0) {
-        auth.users[index].balance -= Number(data.amount)
-        alert(`Transaction done, your balance is $${auth.users[index].balance}`)
-      } else {
-        alert("You don't have enough money")
-        return false
+  const getAccounts = async () => {
+    try {
+      if (authFB) {
+        const response = await accountAPI.all();
+        return response.data;
       }
-      return true
-    }
+      } catch (error) {
+          console.log(error);
+          return
+      }   
+  }
+  const handle = (data) => {
+    let user;
+  getAccounts()
+    .then((dataUsers) => {
+      user = dataUsers.filter(user => user.firebaseId === authFB.uid)
+      setBalance(user[0].balance)
+      console.log('balance', balance)
+    })
+    .then(async () => {
+      console.log('data from deposit', data)
+      if (balance > 0 && balance >= Number(data.amount) && Number(data.amount) >= 0) {
+        console.log('withdrawn', data.amount)
+        let newbalance = Number(balance) - Number(data.amount)
+        setBalance(newbalance)
+        setLoaded(true)
+        console.log('newbalance', balance)
+        await accountAPI.updated(user[0]._id, -data.amount)
+        alert(`Transaction done, your balance is ${Number(balance) - Number(data.amount) }`)
+      } else {
+        if (loaded) {
+          alert("You don't have enough money")
+        }
+          return false
+        }
+        return true
+      })   
+  }
+  handle();  
     return (
       <Fragment>
         <BankForm
