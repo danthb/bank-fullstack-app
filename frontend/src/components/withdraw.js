@@ -8,10 +8,10 @@ export default function Withdraw() {
   const [balance, setBalance] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
-  const getAccounts = async () => {
+  const getAccount = async () => {
     try {
       if (authFB) {
-        const response = await accountAPI.all();
+        const response = await accountAPI.getUser(authFB.uid);
         return response.data;
       }
       } catch (error) {
@@ -21,7 +21,7 @@ export default function Withdraw() {
   }
   const handle = (data) => {
     let user;
-  getAccounts()
+  getAccount()
     .then((dataUsers) => {
       user = dataUsers.filter(user => user.firebaseId === authFB.uid)
       setBalance(user[0].balance)

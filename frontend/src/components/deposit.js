@@ -6,11 +6,13 @@ import { accountAPI } from "../services";
 export default function Deposit(){
   const { authFB } = useContext(AuthContextFB);
   const[balance, setBalance] = useState(0);
-  /* const [success, setSuccess] = useState(true) */
-  const getAccounts = async () => {
+
+  const getAccount = async () => {
     try {
       if (authFB) {
-        const response = await accountAPI.all();
+        const response = await accountAPI.getUser(authFB.uid);
+        console.log(authFB.uid)
+        console.log(response.data)
         return response.data;
       }
       } catch (error) {
@@ -21,7 +23,7 @@ export default function Deposit(){
 
 const handle = (data) => {
   let user;
-  getAccounts()
+  getAccount()
     .then((dataUsers) => {
       user = dataUsers.filter(user => user.firebaseId === authFB.uid)
       setBalance(user[0].balance)
